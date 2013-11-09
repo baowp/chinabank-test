@@ -23,12 +23,22 @@ public class JettyContainer implements Container {
     private static final Logger logger = getLogger(JettyContainer.class);
 
     public static final String JETTY_PORT = "jetty.port";
-
     public static final int DEFAULT_JETTY_PORT = 8080;
+
+    public static final String SPRING_SERVLET = "spring.servlet";
+    public static final String DEFAULT_SPRING_SERVLET = "classpath*:spring-servlet.xml";
 
     SelectChannelConnector connector;
 
     public void start() {
+        String springConfig = LaunchUtil.getProperty(SpringContainer.SPRING_CONFIG);
+        if (springConfig == null || springConfig.length() == 0) {
+            springConfig = SpringContainer.DEFAULT_SPRING_CONFIG;
+        }
+        String springServlet = LaunchUtil.getProperty(SPRING_SERVLET);
+        if (springServlet == null || springServlet.isEmpty()) {
+            springServlet = DEFAULT_SPRING_SERVLET;
+        }
         String serverPort = LaunchUtil.getProperty(JETTY_PORT);
         int port;
         if (serverPort == null || serverPort.length() == 0) {
@@ -38,20 +48,25 @@ public class JettyContainer implements Container {
         }
 
         connector = new SelectChannelConnector();
-       // connector.setMaxIdleTime(1000);
-       // connector.setAcceptors(10);
+        // connector.setMaxIdleTime(1000);
+        // connector.setAcceptors(10);
         connector.setPort(port);
-       // connector.setConfidentialPort(8443);
+        // connector.setConfidentialPort(8443);
 
         Server server = new Server();
         server.setConnectors(new Connector[]{connector});
 
-        ServletContextHandler handler = new ServletContextHandler(server, "/", true, false);
+        ServletContextHandler handler = new ServletContextHandler(server, "/");
 
-        ServletHolder servletHolder = new ServletHolder("rest", DispatcherServlet.class);
-        servletHolder.setInitParameter("contextConfigLocation", "classpath:spring-servlet.xml");
+        handler.setInitParameter("contextConfigLocation", springConfig);
+        handler.addEventListener(new org.springframework.web.context.ContextLoaderListener());
 
-        handler.addServlet(servletHolder, "/*");
+        ServletHolder servletHolder = new ServletHolder(DispatcherServlet.class);
+        servletHolder.setInitParameter("contextConfigLocation", springServlet);
+        servletHolder.setInitOrder(2);
+
+        handler.addServlet(servletHolder, "/");
+        //server.setHandler(handler);
 
         try {
             server.start();

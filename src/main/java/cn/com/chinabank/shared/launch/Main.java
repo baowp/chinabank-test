@@ -40,8 +40,6 @@ public class Main {
             List<String> argList = Arrays.asList(args);
             if (argList.contains("spring"))
                 containers.add(new SpringContainer());
-            if(argList.contains("registry"))
-                containers.add(new RegistryContainer());
             if (argList.contains("jetty"))
                 containers.add(new JettyContainer());
            /* for (int i = 0; i < args.length; i ++) {
