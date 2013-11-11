@@ -13,6 +13,7 @@
 
   <properties>
     <spring.version>3.2.2.RELEASE</spring.version>
+    <jetty.version>8.1.4.v20120524</jetty.version>
   </properties>
 
   <dependencies>
@@ -29,12 +30,27 @@
     <dependency>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-server</artifactId>
-        <version>8.1.4.v20120524</version>
+        <version>${jetty.version}</version>
     </dependency>
     <dependency>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-servlet</artifactId>
-        <version>8.1.4.v20120524</version>
+        <version>${jetty.version}</version>
     </dependency>
+    <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-webapp</artifactId>
+        <version>${jetty.version}</version>
+    </dependency>
+      <dependency>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-plus</artifactId>
+          <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-annotations</artifactId>
+          <version>${jetty.version}</version>
+      </dependency>
   </dependencies>
 </project>

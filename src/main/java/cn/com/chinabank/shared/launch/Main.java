@@ -42,6 +42,8 @@ public class Main {
                 containers.add(new SpringContainer());
             if (argList.contains("jetty"))
                 containers.add(new JettyContainer());
+            else if(argList.contains("jettyWeb"))
+                containers.add(new JettyWebContainer());
            /* for (int i = 0; i < args.length; i ++) {
                 containers.add(loader.getExtension(args[i]));
             }
